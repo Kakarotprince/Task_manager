@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = 'dev-secret-key' # Use environment variables in production
+app.config['JWT_SECRET_KEY'] = 'dev-secret-key'
 
 
 db.init_app(app)
