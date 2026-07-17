@@ -123,11 +123,19 @@
             const list = document.getElementById('taskList');
             list.innerHTML = '';
             tasks.forEach(task => {
+                // Apply a strikethrough if the task is completed
+                const textStyle = task.completed ? 'text-decoration: line-through; color: #6c757d;' : '';
+                
                 list.innerHTML += `
                     <li class="task-item">
-                        <div>
-                            <strong>${task.title}</strong><br>
-                            <small>${task.description || ''}</small>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" 
+                                   ${task.completed ? 'checked' : ''} 
+                                   onchange="toggleTask(${task.id}, ${task.completed})">
+                            <div style="${textStyle}">
+                                <strong>${task.title}</strong><br>
+                                <small>${task.description || ''}</small>
+                            </div>
                         </div>
                         <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
                     </li>
@@ -159,6 +167,28 @@
                 showMessage('Task added');
             }
         } catch (error) { showMessage('Failed to add task', true); }
+    }
+
+    async function toggleTask(id, currentStatus) {
+        try {
+            const res = await fetch(`${API_URL}/tasks/${id}`, {
+                method: 'PUT',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
+                // We send the opposite of the current status
+                body: JSON.stringify({ completed: !currentStatus }) 
+            });
+            
+            if (res.ok) { 
+                fetchTasks(); // Refresh the list to show the updated status
+            } else {
+                showMessage('Failed to update task', true);
+            }
+        } catch (error) { 
+            showMessage('Network error while updating', true); 
+        }
     }
 
     async function deleteTask(id) {

@@ -1,0 +1,18 @@
+# Virtual Environment
+venv/
+env/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Local Database
+tasks.db
+instance/
+
+# Testing Cache
+.pytest_cache/
+
+# Environment Variables (for future use)
+.env
